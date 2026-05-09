@@ -1,25 +1,33 @@
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI
+from pydantic import BaseModel
+
 from app.retriever import retrieve_docs
 from app.rag_chain import get_answer
 
 
-def ask(question):
+app = FastAPI()
 
-    docs = retrieve_docs(question)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    answer = get_answer(question, docs)
+class QueryRequest(BaseModel):
+    question: str
 
-    return answer
 
+@app.post("/ask")
+def ask_question(req: QueryRequest):
 
-if __name__ == "__main__":
+    docs = retrieve_docs(req.question)
 
-    while True:
+    answer = get_answer(req.question, docs)
 
-        q = input("\nAsk: ")
-
-        if q.lower() in ["exit", "quit"]:
-            break
-
-        response = ask(q)
-
-        print("\nAnswer:\n", response)
+    return {
+        "question": req.question,
+        "answer": answer
+    }
