@@ -7,7 +7,7 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
-LLM_MODEL = "meta-llama/llama-3-8b-instruct:free"
+LLM_MODEL = "openai/gpt-oss-120b:free"
 
 EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 
